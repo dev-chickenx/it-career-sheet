@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジニア キャリアプランシート</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+    --bg:#0f172a;
+    --card:rgba(255,255,255,0.08);
+    --border:rgba(255,255,255,0.15);
+    --text:#e2e8f0;
+    --primary:#3b82f6;
+    --secondary:#8b5cf6;
+    --success:#22c55e;
+    --warning:#f59e0b;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:30px;
+    font-family:"Segoe UI","Yu Gothic",sans-serif;
+
+    background:
+        linear-gradient(135deg,#020617,#0f172a,#111827);
+
+    color:var(--text);
+}
+
+.container{
+    max-width:1600px;
+    margin:auto;
+}
+
+.hero{
+
+    background:
+      linear-gradient(
+      135deg,
+      #0078d4,
+      #2563eb
+      );
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    margin-bottom:24px;
+
+    box-shadow:
+      0 10px 25px rgba(0,120,212,.25);
+}
+
+.hero h1{
+    margin:0;
+    font-size:32px;
+}
+
+.hero p{
+    margin-top:8px;
+    opacity:.9;
+}
+
+.hero-icon{
+    font-size:34px;
+}
+
+.card{
+
+    background:var(--card);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.25);
+}
+
+h2{
+    margin-top:0;
+    color:#60a5fa;
+}
+
+.input-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    color:var(--sub);
+    font-size:14px;
+}
+
+input{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:white;
+
+    color:#334155;
+
+    transition:.3s;
+}
+
+input:focus{
+
+    outline:none;
+
+    border-color:#3b82f6;
+
+    box-shadow:
+        0 0 0 4px rgba(59,130,246,.25);
+}
+
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid #dbe2ea;
+
+    background:white;
+
+    color:#334155;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+select:hover{
+
+    border-color:#2563eb;
+}
+
+select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.15);
+}
+
+hr{
+    border:none;
+    height:1px;
+    background:rgba(255,255,255,.08);
+    margin:30px 0;
+}
+
+button{
+
+    background:
+      linear-gradient(
+      90deg,
+      #2563eb,
+      #3b82f6
+      );
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:14px 28px;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+      0 12px 30px rgba(37,99,235,.4);
+}
+
+.chart-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:24px;
+
+    margin-bottom:20px;
+}
+
+.chart-card{
+
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:16px;
+
+    padding:24px;
+
+    text-align:center;
+
+    height:420px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+}
+
+.chart-card canvas{
+
+    width:320px !important;
+    height:320px !important;
+
+    margin:auto;
+}
+
+.chart-card h3{
+
+    color:#0f172a;
+
+    font-size:15px;
+
+    margin-bottom:10px;
+
+    font-weight:600;
+}
+
+.result-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+}
+
+.result-box{
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    padding:20px;
+}
+
+.result-box h3{
+    margin-top:0;
+}
+
+.score-panel{
+
+    text-align:center;
+
+    padding:20px;
+}
+
+.grade{
+
+    width:140px;
+
+    height:140px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    font-size:64px;
+
+    font-weight:bold;
+
+    background:
+       linear-gradient(
+       135deg,
+       #22c55e,
+       #16a34a
+       );
+
+    color:white;
+
+    box-shadow:
+      0 15px 35px rgba(34,197,94,.45);
+}
+
+.score-label{
+
+    margin-top:15px;
+
+    font-size:24px;
+
+    color:white;
+}
+
+.strength{
+
+    border-left:5px solid #22c55e;
+}
+
+.weakness{
+
+    border-left:5px solid #f97316;
+}
+
+.job-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px;
+
+    margin-bottom:10px;
+
+    border-radius:12px;
+
+    background:
+      linear-gradient(
+      90deg,
+      rgba(59,130,246,.15),
+      rgba(139,92,246,.15)
+      );
+}
+
+.job-ranking{
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.job-card{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:16px 20px;
+
+    border-radius:14px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    transition:.2s;
+}
+
+.job-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 6px 16px rgba(0,0,0,.08);
+}
+
+.rank1{
+    background:linear-gradient(
+      90deg,
+      #fef3c7,
+      #fde68a
+    );
+
+    border-color:#f59e0b;
+
+    color:#78350f;
+}
+
+.rank2{
+    background:linear-gradient(
+      90deg,
+      #f1f5f9,
+      #e2e8f0
+    );
+
+    border-color:#94a3b8;
+
+    color:#334155;
+}
+
+.rank3{
+    background:linear-gradient(
+      90deg,
+      #fed7aa,
+      #fdba74
+    );
+
+    border-color:#ea580c;
+
+    color:#7c2d12;
+}
+
+.job-score{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    font-weight:bold;
+}
+
+ul{
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:8px;
+}
+
+.job-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.job-title{
+    flex:1;
+    color:#0f172a;
+    font-size:18px;
+    font-weight:700;
+}
+
+.job-medal{
+    font-size:24px;
+}
+
+.job-reason{
+    margin-top:12px;
+    color:#475569;
+    font-size:14px;
+}
+
+.job-reason ul{
+    margin:0;
+}
+
+.job-reason li{
+    color:#475569;
+}
+
+@media(max-width:900px){
+
+    .input-grid,
+    .chart-grid,
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+.skill-list{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.skill-item{
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    padding:20px;
+
+    margin-bottom:16px;
+}
+
+.skill-item.active-next{
+    border-color:#60a5fa;
+    box-shadow:0 0 20px rgba(96,165,250,.35);
+}
+
+.skill-title{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+    color:white;
+}
+
+.radio-rating{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap:10px;
+}
+
+.radio-rating input[type="radio"]{
+    display:none;
+}
+
+.radio-rating label{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    height:48px;
+
+    padding:0 10px;
+
+    border-radius:12px;
+
+    white-space:nowrap;
+}
+
+.radio-rating label:hover{
+
+    border-color:#60a5fa;
+
+    background:rgba(59,130,246,.1);
+}
+
+.radio-rating input[type="radio"]:checked + label{
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    border-color:#60a5fa;
+
+    color:white;
+
+    box-shadow:
+        0 4px 14px rgba(37,99,235,.35);
+}
+
+.basic-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    max-width:800px;
+}
+
+.form-row{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.form-row label{
+
+    color:#e2e8f0;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+.form-row input,
+.form-row select{
+    width:auto;
+    min-width:180px;
+    max-width:300px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 入力ページ -->
+<div id="inputPage">    
+    <div class="hero">
+        <div class="hero-icon">🚀</div>
+        <h1>エンジニア キャリアプランシート</h1>
+        <p>
+            スキル分析・適性診断・キャリア提案
+        </p>
+    </div>
+
+    <div class="card">
+
+    <h2>基本情報</h2>
+
+    <div class="basic-info">
+        <div class="form-row">
+            <label>氏名</label>
+            <input type="text" name="name" placeholder="メイテック 太郎">
+        </div>
+
+        <div class="form-row">
+            <label>社員番号</label>    
+            <input type="text" name="employee_no" placeholder="12345678">
+        </div>
+
+        <div class="form-row">
+            <label>所属</label>    
+            <select name="department">
+                <option value="">選択してください</option>
+                <option value="横浜西EC" selected>横浜西EC</option>
+                <option value="横浜EC">横浜EC</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>専門分野</label>    
+            <select name="specialty">
+                <option value="">選択してください</option>
+                <option value="ME">ME</option>
+                <option value="EL">EL</option>
+                <option value="MS">MS</option>
+                <option value="IT">IT</option>
+                <option value="CH">CH</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>エンジニア経験年数</label>    
+            <select name="experience_years">
+                <option value="">選択してください</option>
+                <option value="1年未満">1年未満</option>
+                <option value="1～3年">1～3年</option>
+                <option value="4～9年">4～9年</option>
+                <option value="10年以上">10年以上</option>
+            </select>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>プログラミング</h2>
+
+    <div class="skill-list">
+        <!-- Java -->
+        <div class="skill-item">
+            <div class="skill-title">Java</div>
+            <div class="radio-rating">
+                <input type="radio" id="java5" name="java" value="5"><label for="java5">豊富な経験</label>
+                <input type="radio" id="java4" name="java" value="4"><label for="java4">十分な経験</label>
+                <input type="radio" id="java3" name="java" value="3"><label for="java3">経験あり</label>
+                <input type="radio" id="java2" name="java" value="2"><label for="java2">少し経験</label>
+                <input type="radio" id="java1" name="java" value="1"><label for="java1">未経験</label>
+            </div>
+        </div>
+
+        <!-- C# -->
+        <div class="skill-item">
+            <div class="skill-title">C#</div>
+            <div class="radio-rating">
+                <input type="radio" id="csharp5" name="csharp" value="5"><label for="csharp5">豊富な経験</label>
+                <input type="radio" id="csharp4" name="csharp" value="4"><label for="csharp4">十分な経験</label>
+                <input type="radio" id="csharp3" name="csharp" value="3"><label for="csharp3">経験あり</label>
+                <input type="radio" id="csharp2" name="csharp" value="2"><label for="csharp2">少し経験</label>
+                <input type="radio" id="csharp1" name="csharp" value="1"><label for="csharp1">未経験</label>
+            </div>
+        </div>
+
+        <!-- Python -->
+        <div class="skill-item">
+            <div class="skill-title">Python</div>
+            <div class="radio-rating">
+                <input type="radio" id="python5" name="python" value="5"><label for="python5">豊富な経験</label>
+                <input type="radio" id="python4" name="python" value="4"><label for="python4">十分な経験</label>
+                <input type="radio" id="python3" name="python" value="3"><label for="python3">経験あり</label>
+                <input type="radio" id="python2" name="python" value="2"><label for="python2">少し経験</label>
+                <input type="radio" id="python1" name="python" value="1"><label for="python1">未経験</label>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="skill-item">
+            <div class="skill-title">JavaScript</div>
+            <div class="radio-rating">
+                <input type="radio" id="javascript5" name="javascript" value="5"><label for="javascript5">豊富な経験</label>
+                <input type="radio" id="javascript4" name="javascript" value="4"><label for="javascript4">十分な経験</label>
+                <input type="radio" id="javascript3" name="javascript" value="3"><label for="javascript3">経験あり</label>
+                <input type="radio" id="javascript2" name="javascript" value="2"><label for="javascript2">少し経験</label>
+                <input type="radio" id="javascript1" name="javascript" value="1"><label for="javascript1">未経験</label>
+            </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="skill-item">
+            <div class="skill-title">TypeScript</div>
+            <div class="radio-rating">
+                <input type="radio" id="typescript5" name="typescript" value="5"><label for="typescript5">豊富な経験</label>
+                <input type="radio" id="typescript4" name="typescript" value="4"><label for="typescript4">十分な経験</label>
+                <input type="radio" id="typescript3" name="typescript" value="3"><label for="typescript3">経験あり</label>
+                <input type="radio" id="typescript2" name="typescript" value="2"><label for="typescript2">少し経験</label>
+                <input type="radio" id="typescript1" name="typescript" value="1"><label for="typescript1">未経験</label>
+            </div>
+        </div>
+
+        <!-- PHP -->
+        <div class="skill-item">
+            <div class="skill-title">PHP</div>
+            <div class="radio-rating">
+                <input type="radio" id="php5" name="php" value="5"><label for="php5">豊富な経験</label>
+                <input type="radio" id="php4" name="php" value="4"><label for="php4">十分な経験</label>
+                <input type="radio" id="php3" name="php" value="3"><label for="php3">経験あり</label>
+                <input type="radio" id="php2" name="php" value="2"><label for="php2">少し経験</label>
+                <input type="radio" id="php1" name="php" value="1"><label for="php1">未経験</label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>フロントエンド</h2>
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">HTML/CSS</div>
+            <div class="radio-rating">
+                <input type="radio" id="htmlcss5" name="htmlcss" value="5">
+                <label for="htmlcss5">豊富な経験</label>
+                <input type="radio" id="htmlcss4" name="htmlcss" value="4">
+                <label for="htmlcss4">十分な経験</label>
+                <input type="radio" id="htmlcss3" name="htmlcss" value="3">
+                <label for="htmlcss3">経験あり</label>
+                <input type="radio" id="htmlcss2" name="htmlcss" value="2">
+                <label for="htmlcss2">少し経験</label>
+                <input type="radio" id="htmlcss1" name="htmlcss" value="1">
+                <label for="htmlcss1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">React</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="react5" name="react" value="5">
+                <label for="react5">豊富な経験</label>
+
+                <input type="radio" id="react4" name="react" value="4">
+                <label for="react4">十分な経験</label>
+
+                <input type="radio" id="react3" name="react" value="3">
+                <label for="react3">経験あり</label>
+
+                <input type="radio" id="react2" name="react" value="2">
+                <label for="react2">少し経験</label>
+
+                <input type="radio" id="react1" name="react" value="1">
+                <label for="react1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Vue.js</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="vue5" name="vue" value="5">
+                <label for="vue5">豊富な経験</label>
+
+                <input type="radio" id="vue4" name="vue" value="4">
+                <label for="vue4">十分な経験</label>
+
+                <input type="radio" id="vue3" name="vue" value="3">
+                <label for="vue3">経験あり</label>
+
+                <input type="radio" id="vue2" name="vue" value="2">
+                <label for="vue2">少し経験</label>
+
+                <input type="radio" id="vue1" name="vue" value="1">
+                <label for="vue1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Angular</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="angular5" name="angular" value="5">
+                <label for="angular5">豊富な経験</label>
+
+                <input type="radio" id="angular4" name="angular" value="4">
+                <label for="angular4">十分な経験</label>
+
+                <input type="radio" id="angular3" name="angular" value="3">
+                <label for="angular3">経験あり</label>
+
+                <input type="radio" id="angular2" name="angular" value="2">
+                <label for="angular2">少し経験</label>
+
+                <input type="radio" id="angular1" name="angular" value="1">
+                <label for="angular1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Nuxt</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="nuxt5" name="nuxt" value="5">
+                <label for="nuxt5">豊富な経験</label>
+
+                <input type="radio" id="nuxt4" name="nuxt" value="4">
+                <label for="nuxt4">十分な経験</label>
+
+                <input type="radio" id="nuxt3" name="nuxt" value="3">
+                <label for="nuxt3">経験あり</label>
+
+                <input type="radio" id="nuxt2" name="nuxt" value="2">
+                <label for="nuxt2">少し経験</label>
+
+                <input type="radio" id="nuxt1" name="nuxt" value="1">
+                <label for="nuxt1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Next.js</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="nextjs5" name="nextjs" value="5">
+                <label for="nextjs5">豊富な経験</label>
+
+                <input type="radio" id="nextjs4" name="nextjs" value="4">
+                <label for="nextjs4">十分な経験</label>
+
+                <input type="radio" id="nextjs3" name="nextjs" value="3">
+                <label for="nextjs3">経験あり</label>
+
+                <input type="radio" id="nextjs2" name="nextjs" value="2">
+                <label for="nextjs2">少し経験</label>
+
+                <input type="radio" id="nextjs1" name="nextjs" value="1">
+                <label for="nextjs1">未経験</label>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>フレームワーク</h2>
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">Spring Boot</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="springboot5" name="springboot" value="5">
+                <label for="springboot5">豊富な経験</label>
+
+                <input type="radio" id="springboot4" name="springboot" value="4">
+                <label for="springboot4">十分な経験</label>
+
+                <input type="radio" id="springboot3" name="springboot" value="3">
+                <label for="springboot3">経験あり</label>
+
+                <input type="radio" id="springboot2" name="springboot" value="2">
+                <label for="springboot2">少し経験</label>
+
+                <input type="radio" id="springboot1" name="springboot" value="1">
+                <label for="springboot1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Laravel</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="laravel5" name="laravel" value="5">
+                <label for="laravel5">豊富な経験</label>
+
+                <input type="radio" id="laravel4" name="laravel" value="4">
+                <label for="laravel4">十分な経験</label>
+
+                <input type="radio" id="laravel3" name="laravel" value="3">
+                <label for="laravel3">経験あり</label>
+
+                <input type="radio" id="laravel2" name="laravel" value="2">
+                <label for="laravel2">少し経験</label>
+
+                <input type="radio" id="laravel1" name="laravel" value="1">
+                <label for="laravel1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">Node.js</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="nodejs5" name="nodejs" value="5">
+                <label for="nodejs5">豊富な経験</label>
+
+                <input type="radio" id="nodejs4" name="nodejs" value="4">
+                <label for="nodejs4">十分な経験</label>
+
+                <input type="radio" id="nodejs3" name="nodejs" value="3">
+                <label for="nodejs3">経験あり</label>
+
+                <input type="radio" id="nodejs2" name="nodejs" value="2">
+                <label for="nodejs2">少し経験</label>
+
+                <input type="radio" id="nodejs1" name="nodejs" value="1">
+                <label for="nodejs1">未経験</label>
+            </div>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-title">ASP.NET</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aspnet5" name="aspnet" value="5">
+                <label for="aspnet5">豊富な経験</label>
+
+                <input type="radio" id="aspnet4" name="aspnet" value="4">
+                <label for="aspnet4">十分な経験</label>
+
+                <input type="radio" id="aspnet3" name="aspnet" value="3">
+                <label for="aspnet3">経験あり</label>
+
+                <input type="radio" id="aspnet2" name="aspnet" value="2">
+                <label for="aspnet2">少し経験</label>
+
+                <input type="radio" id="aspnet1" name="aspnet" value="1">
+                <label for="aspnet1">未経験</label>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <h2>データベース</h2>
+
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">Oracle</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="oracle5" name="oracle" value="5">
+                <label for="oracle5">豊富な経験</label>
+
+                <input type="radio" id="oracle4" name="oracle" value="4">
+                <label for="oracle4">十分な経験</label>
+
+                <input type="radio" id="oracle3" name="oracle" value="3">
+                <label for="oracle3">経験あり</label>
+
+                <input type="radio" id="oracle2" name="oracle" value="2">
+                <label for="oracle2">少し経験</label>
+
+                <input type="radio" id="oracle1" name="oracle" value="1">
+                <label for="oracle1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">SQL Server</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="sqlserver5" name="sqlserver" value="5">
+                <label for="sqlserver5">豊富な経験</label>
+
+                <input type="radio" id="sqlserver4" name="sqlserver" value="4">
+                <label for="sqlserver4">十分な経験</label>
+
+                <input type="radio" id="sqlserver3" name="sqlserver" value="3">
+                <label for="sqlserver3">経験あり</label>
+
+                <input type="radio" id="sqlserver2" name="sqlserver" value="2">
+                <label for="sqlserver2">少し経験</label>
+
+                <input type="radio" id="sqlserver1" name="sqlserver" value="1">
+                <label for="sqlserver1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">PostgreSQL</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="postgresql5" name="postgresql" value="5">
+                <label for="postgresql5">豊富な経験</label>
+
+                <input type="radio" id="postgresql4" name="postgresql" value="4">
+                <label for="postgresql4">十分な経験</label>
+
+                <input type="radio" id="postgresql3" name="postgresql" value="3">
+                <label for="postgresql3">経験あり</label>
+
+                <input type="radio" id="postgresql2" name="postgresql" value="2">
+                <label for="postgresql2">少し経験</label>
+
+                <input type="radio" id="postgresql1" name="postgresql" value="1">
+                <label for="postgresql1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">MySQL</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="mysql5" name="mysql" value="5">
+                <label for="mysql5">豊富な経験</label>
+
+                <input type="radio" id="mysql4" name="mysql" value="4">
+                <label for="mysql4">十分な経験</label>
+
+                <input type="radio" id="mysql3" name="mysql" value="3">
+                <label for="mysql3">経験あり</label>
+
+                <input type="radio" id="mysql2" name="mysql" value="2">
+                <label for="mysql2">少し経験</label>
+
+                <input type="radio" id="mysql1" name="mysql" value="1">
+                <label for="mysql1">未経験</label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>クラウド</h2>
+
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">AWS</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aws5" name="aws" value="5">
+                <label for="aws5">豊富な経験</label>
+
+                <input type="radio" id="aws4" name="aws" value="4">
+                <label for="aws4">十分な経験</label>
+
+                <input type="radio" id="aws3" name="aws" value="3">
+                <label for="aws3">経験あり</label>
+
+                <input type="radio" id="aws2" name="aws" value="2">
+                <label for="aws2">少し経験</label>
+
+                <input type="radio" id="aws1" name="aws" value="1">
+                <label for="aws1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">Azure</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="azure5" name="azure" value="5">
+                <label for="azure5">豊富な経験</label>
+
+                <input type="radio" id="azure4" name="azure" value="4">
+                <label for="azure4">十分な経験</label>
+
+                <input type="radio" id="azure3" name="azure" value="3">
+                <label for="azure3">経験あり</label>
+
+                <input type="radio" id="azure2" name="azure" value="2">
+                <label for="azure2">少し経験</label>
+
+                <input type="radio" id="azure1" name="azure" value="1">
+                <label for="azure1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">SDPF</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="sdpf5" name="sdpf" value="5">
+                <label for="sdpf5">豊富な経験</label>
+
+                <input type="radio" id="sdpf4" name="sdpf" value="4">
+                <label for="sdpf4">十分な経験</label>
+
+                <input type="radio" id="sdpf3" name="sdpf" value="3">
+                <label for="sdpf3">経験あり</label>
+
+                <input type="radio" id="sdpf2" name="sdpf" value="2">
+                <label for="sdpf2">少し経験</label>
+
+                <input type="radio" id="sdpf1" name="sdpf" value="1">
+                <label for="sdpf1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">Oracle Cloud</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="oraclecloud5" name="oraclecloud" value="5">
+                <label for="oraclecloud5">豊富な経験</label>
+
+                <input type="radio" id="oraclecloud4" name="oraclecloud" value="4">
+                <label for="oraclecloud4">十分な経験</label>
+
+                <input type="radio" id="oraclecloud3" name="oraclecloud" value="3">
+                <label for="oraclecloud3">経験あり</label>
+
+                <input type="radio" id="oraclecloud2" name="oraclecloud" value="2">
+                <label for="oraclecloud2">少し経験</label>
+
+                <input type="radio" id="oraclecloud1" name="oraclecloud" value="1">
+                <label for="oraclecloud1">未経験</label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>サーバー</h2>
+
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">Windows Server</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="windows5" name="windows" value="5">
+                <label for="windows5">豊富な経験</label>
+
+                <input type="radio" id="windows4" name="windows" value="4">
+                <label for="windows4">十分な経験</label>
+
+                <input type="radio" id="windows3" name="windows" value="3">
+                <label for="windows3">経験あり</label>
+
+                <input type="radio" id="windows2" name="windows" value="2">
+                <label for="windows2">少し経験</label>
+
+                <input type="radio" id="windows1" name="windows" value="1">
+                <label for="windows1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">Ubuntu Server</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="ubuntu5" name="ubuntu" value="5">
+                <label for="ubuntu5">豊富な経験</label>
+
+                <input type="radio" id="ubuntu4" name="ubuntu" value="4">
+                <label for="ubuntu4">十分な経験</label>
+
+                <input type="radio" id="ubuntu3" name="ubuntu" value="3">
+                <label for="ubuntu3">経験あり</label>
+
+                <input type="radio" id="ubuntu2" name="ubuntu" value="2">
+                <label for="ubuntu2">少し経験</label>
+
+                <input type="radio" id="ubuntu1" name="ubuntu" value="1">
+                <label for="ubuntu1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">RHEL</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="rhel5" name="rhel" value="5">
+                <label for="rhel5">豊富な経験</label>
+
+                <input type="radio" id="rhel4" name="rhel" value="4">
+                <label for="rhel4">十分な経験</label>
+
+                <input type="radio" id="rhel3" name="rhel" value="3">
+                <label for="rhel3">経験あり</label>
+
+                <input type="radio" id="rhel2" name="rhel" value="2">
+                <label for="rhel2">少し経験</label>
+
+                <input type="radio" id="rhel1" name="rhel" value="1">
+                <label for="rhel1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">Rocky Linux</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="rocky5" name="rocky" value="5">
+                <label for="rocky5">豊富な経験</label>
+
+                <input type="radio" id="rocky4" name="rocky" value="4">
+                <label for="rocky4">十分な経験</label>
+
+                <input type="radio" id="rocky3" name="rocky" value="3">
+                <label for="rocky3">経験あり</label>
+
+                <input type="radio" id="rocky2" name="rocky" value="2">
+                <label for="rocky2">少し経験</label>
+
+                <input type="radio" id="rocky1" name="rocky" value="1">
+                <label for="rocky1">未経験</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">Docker</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="docker5" name="docker" value="5">
+                <label for="docker5">豊富な経験</label>
+
+                <input type="radio" id="docker4" name="docker" value="4">
+                <label for="docker4">十分な経験</label>
+
+                <input type="radio" id="docker3" name="docker" value="3">
+                <label for="docker3">経験あり</label>
+
+                <input type="radio" id="docker2" name="docker" value="2">
+                <label for="docker2">少し経験</label>
+
+                <input type="radio" id="docker1" name="docker" value="1">
+                <label for="docker1">未経験</label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>AI</h2>
+
+    <div class="skill-list">
+        <div class="skill-item">
+            <div class="skill-title">AIツールの利用頻度</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aiuse5" name="aiuse" value="5">
+                <label for="aiuse5">業務変革を主導</label>
+
+                <input type="radio" id="aiuse4" name="aiuse" value="4">
+                <label for="aiuse4">高度活用</label>
+
+                <input type="radio" id="aiuse3" name="aiuse" value="3">
+                <label for="aiuse3">日常利用</label>
+
+                <input type="radio" id="aiuse2" name="aiuse" value="2">
+                <label for="aiuse2">時々利用</label>
+
+                <input type="radio" id="aiuse1" name="aiuse" value="1">
+                <label for="aiuse1">未利用</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">プロンプト作成スキル</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aiprompt5" name="aiprompt" value="5">
+                <label for="aiprompt5">指導できる</label>
+
+                <input type="radio" id="aiprompt4" name="aiprompt" value="4">
+                <label for="aiprompt4">最適化できる</label>
+
+                <input type="radio" id="aiprompt3" name="aiprompt" value="3">
+                <label for="aiprompt3">条件指定可能</label>
+
+                <input type="radio" id="aiprompt2" name="aiprompt" value="2">
+                <label for="aiprompt2">簡単な質問のみ</label>
+
+                <input type="radio" id="aiprompt1" name="aiprompt" value="1">
+                <label for="aiprompt1">指示できない</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">AIの業務活用レベル</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aiwork5" name="aiwork" value="5">
+                <label for="aiwork5">業務設計</label>
+
+                <input type="radio" id="aiwork4" name="aiwork" value="4">
+                <label for="aiwork4">分析・資料作成</label>
+
+                <input type="radio" id="aiwork3" name="aiwork" value="3">
+                <label for="aiwork3">文書作成</label>
+
+                <input type="radio" id="aiwork2" name="aiwork" value="2">
+                <label for="aiwork2">情報検索</label>
+
+                <input type="radio" id="aiwork1" name="aiwork" value="1">
+                <label for="aiwork1">未活用</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">AI出力の評価・活用能力</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aieval5" name="aieval" value="5">
+                <label for="aieval5">基準設計可能</label>
+
+                <input type="radio" id="aieval4" name="aieval" value="4">
+                <label for="aieval4">品質向上可能</label>
+
+                <input type="radio" id="aieval3" name="aieval" value="3">
+                <label for="aieval3">修正して利用</label>
+
+                <input type="radio" id="aieval2" name="aieval" value="2">
+                <label for="aieval2">誤り確認のみ</label>
+
+                <input type="radio" id="aieval1" name="aieval" value="1">
+                <label for="aieval1">判断できない</label>
+            </div>
+        </div>
+        <div class="skill-item">
+            <div class="skill-title">AI推進・応用スキル</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="aipromo5" name="aipromo" value="5">
+                <label for="aipromo5">全社推進可能</label>
+
+                <input type="radio" id="aipromo4" name="aipromo" value="4">
+                <label for="aipromo4">改善を提案</label>
+
+                <input type="radio" id="aipromo3" name="aipromo" value="3">
+                <label for="aipromo3">チーム共有</label>
+
+                <input type="radio" id="aipromo2" name="aipromo" value="2">
+                <label for="aipromo2">個人利用</label>
+
+                <input type="radio" id="aipromo1" name="aipromo" value="1">
+                <label for="aipromo1">推進経験なし</label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>業務フェーズ</h2>
+
+    <div class="skill-list">
+        <!-- 要件定義 -->
+        <div class="skill-item">
+            <div class="skill-title">要件定義</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="dev5" name="dev" value="5">
+                <label for="dev5">豊富な経験</label>
+
+                <input type="radio" id="dev4" name="dev" value="4">
+                <label for="dev4">十分な経験</label>
+
+                <input type="radio" id="dev3" name="dev" value="3">
+                <label for="dev3">経験あり</label>
+
+                <input type="radio" id="dev2" name="dev" value="2">
+                <label for="dev2">少し経験</label>
+
+                <input type="radio" id="dev1" name="dev" value="1">
+                <label for="dev1">未経験</label>
+            </div>
+        </div>
+
+        <!-- 基本設計 -->
+        <div class="skill-item">
+            <div class="skill-title">基本設計</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="basic5" name="basic" value="5">
+                <label for="basic5">豊富な経験</label>
+
+                <input type="radio" id="basic4" name="basic" value="4">
+                <label for="basic4">十分な経験</label>
+
+                <input type="radio" id="basic3" name="basic" value="3">
+                <label for="basic3">経験あり</label>
+
+                <input type="radio" id="basic2" name="basic" value="2">
+                <label for="basic2">少し経験</label>
+
+                <input type="radio" id="basic1" name="basic" value="1">
+                <label for="basic1">未経験</label>
+            </div>
+        </div>
+
+        <!-- 詳細設計 -->
+        <div class="skill-item">
+            <div class="skill-title">詳細設計</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="detail5" name="detail" value="5">
+                <label for="detail5">豊富な経験</label>
+
+                <input type="radio" id="detail4" name="detail" value="4">
+                <label for="detail4">十分な経験</label>
+
+                <input type="radio" id="detail3" name="detail" value="3">
+                <label for="detail3">経験あり</label>
+
+                <input type="radio" id="detail2" name="detail" value="2">
+                <label for="detail2">少し経験</label>
+
+                <input type="radio" id="detail1" name="detail" value="1">
+                <label for="detail1">未経験</label>
+            </div>
+        </div>
+
+        <!-- 実装 -->
+        <div class="skill-item">
+            <div class="skill-title">実装</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="make5" name="make" value="5">
+                <label for="make5">豊富な経験</label>
+
+                <input type="radio" id="make4" name="make" value="4">
+                <label for="make4">十分な経験</label>
+
+                <input type="radio" id="make3" name="make" value="3">
+                <label for="make3">経験あり</label>
+
+                <input type="radio" id="make2" name="make" value="2">
+                <label for="make2">少し経験</label>
+
+                <input type="radio" id="make1" name="make" value="1">
+                <label for="make1">未経験</label>
+            </div>
+        </div>
+
+        <!-- コードレビュー -->
+        <div class="skill-item">
+            <div class="skill-title">コードレビュー</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="review5" name="review" value="5">
+                <label for="review5">豊富な経験</label>
+
+                <input type="radio" id="review4" name="review" value="4">
+                <label for="review4">十分な経験</label>
+
+                <input type="radio" id="review3" name="review" value="3">
+                <label for="review3">経験あり</label>
+
+                <input type="radio" id="review2" name="review" value="2">
+                <label for="review2">少し経験</label>
+
+                <input type="radio" id="review1" name="review" value="1">
+                <label for="review1">未経験</label>
+            </div>
+        </div>
+
+        <!-- テスト -->
+        <div class="skill-item">
+            <div class="skill-title">テスト</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="test5" name="test" value="5">
+                <label for="test5">豊富な経験</label>
+
+                <input type="radio" id="test4" name="test" value="4">
+                <label for="test4">十分な経験</label>
+
+                <input type="radio" id="test3" name="test" value="3">
+                <label for="test3">経験あり</label>
+
+                <input type="radio" id="test2" name="test" value="2">
+                <label for="test2">少し経験</label>
+
+                <input type="radio" id="test1" name="test" value="1">
+                <label for="test1">未経験</label>
+            </div>
+        </div>
+
+        <!-- 運用・保守 -->
+        <div class="skill-item">
+            <div class="skill-title">運用・保守</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="support5" name="support" value="5">
+                <label for="support5">豊富な経験</label>
+
+                <input type="radio" id="support4" name="support" value="4">
+                <label for="support4">十分な経験</label>
+
+                <input type="radio" id="support3" name="support" value="3">
+                <label for="support3">経験あり</label>
+
+                <input type="radio" id="support2" name="support" value="2">
+                <label for="support2">少し経験</label>
+
+                <input type="radio" id="support1" name="support" value="1">
+                <label for="support1">未経験</label>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>プロジェクトにおける担当役割</h2>
+
+    <div class="skill-list">
+
+        <!-- プロダクトオーナー -->
+        <div class="skill-item">
+            <div class="skill-title">プロダクトオーナー</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="po5" name="po" value="5">
+                <label for="po5">豊富な経験</label>
+
+                <input type="radio" id="po4" name="po" value="4">
+                <label for="po4">十分な経験</label>
+
+                <input type="radio" id="po3" name="po" value="3">
+                <label for="po3">経験あり</label>
+
+                <input type="radio" id="po2" name="po" value="2">
+                <label for="po2">少し経験</label>
+
+                <input type="radio" id="po1" name="po" value="1">
+                <label for="po1">未経験</label>
+            </div>
+        </div>
+
+        <!-- PMO -->
+        <div class="skill-item">
+            <div class="skill-title">PMO</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="pmo5" name="pmo" value="5">
+                <label for="pmo5">豊富な経験</label>
+
+                <input type="radio" id="pmo4" name="pmo" value="4">
+                <label for="pmo4">十分な経験</label>
+
+                <input type="radio" id="pmo3" name="pmo" value="3">
+                <label for="pmo3">経験あり</label>
+
+                <input type="radio" id="pmo2" name="pmo" value="2">
+                <label for="pmo2">少し経験</label>
+
+                <input type="radio" id="pmo1" name="pmo" value="1">
+                <label for="pmo1">未経験</label>
+            </div>
+        </div>
+
+        <!-- ITコンサルタント -->
+        <div class="skill-item">
+            <div class="skill-title">ITコンサルタント</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="itconsult5" name="itconsult" value="5">
+                <label for="itconsult5">豊富な経験</label>
+
+                <input type="radio" id="itconsult4" name="itconsult" value="4">
+                <label for="itconsult4">十分な経験</label>
+
+                <input type="radio" id="itconsult3" name="itconsult" value="3">
+                <label for="itconsult3">経験あり</label>
+
+                <input type="radio" id="itconsult2" name="itconsult" value="2">
+                <label for="itconsult2">少し経験</label>
+
+                <input type="radio" id="itconsult1" name="itconsult" value="1">
+                <label for="itconsult1">未経験</label>
+            </div>
+        </div>
+
+        <!-- プロジェクトマネージャー -->
+        <div class="skill-item">
+            <div class="skill-title">プロジェクトマネージャー</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="pm5" name="pm" value="5">
+                <label for="pm5">豊富な経験</label>
+
+                <input type="radio" id="pm4" name="pm" value="4">
+                <label for="pm4">十分な経験</label>
+
+                <input type="radio" id="pm3" name="pm" value="3">
+                <label for="pm3">経験あり</label>
+
+                <input type="radio" id="pm2" name="pm" value="2">
+                <label for="pm2">少し経験</label>
+
+                <input type="radio" id="pm1" name="pm" value="1">
+                <label for="pm1">未経験</label>
+            </div>
+        </div>
+
+        <!-- プロジェクトリーダー -->
+        <div class="skill-item">
+            <div class="skill-title">プロジェクトリーダー</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="pl5" name="pl" value="5">
+                <label for="pl5">豊富な経験</label>
+
+                <input type="radio" id="pl4" name="pl" value="4">
+                <label for="pl4">十分な経験</label>
+
+                <input type="radio" id="pl3" name="pl" value="3">
+                <label for="pl3">経験あり</label>
+
+                <input type="radio" id="pl2" name="pl" value="2">
+                <label for="pl2">少し経験</label>
+
+                <input type="radio" id="pl1" name="pl" value="1">
+                <label for="pl1">未経験</label>
+            </div>
+        </div>
+
+        <!-- テックリード -->
+        <div class="skill-item">
+            <div class="skill-title">テックリード</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="techlead5" name="techlead" value="5">
+                <label for="techlead5">豊富な経験</label>
+
+                <input type="radio" id="techlead4" name="techlead" value="4">
+                <label for="techlead4">十分な経験</label>
+
+                <input type="radio" id="techlead3" name="techlead" value="3">
+                <label for="techlead3">経験あり</label>
+
+                <input type="radio" id="techlead2" name="techlead" value="2">
+                <label for="techlead2">少し経験</label>
+
+                <input type="radio" id="techlead1" name="techlead" value="1">
+                <label for="techlead1">未経験</label>
+            </div>
+        </div>
+
+        <!-- 顧客対応・ステークホルダー調整 -->
+        <div class="skill-item">
+            <div class="skill-title">顧客対応・ステークホルダー調整</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="stakeholder5" name="stakeholder" value="5">
+                <label for="stakeholder5">豊富な経験</label>
+
+                <input type="radio" id="stakeholder4" name="stakeholder" value="4">
+                <label for="stakeholder4">十分な経験</label>
+
+                <input type="radio" id="stakeholder3" name="stakeholder" value="3">
+                <label for="stakeholder3">経験あり</label>
+
+                <input type="radio" id="stakeholder2" name="stakeholder" value="2">
+                <label for="stakeholder2">少し経験</label>
+
+                <input type="radio" id="stakeholder1" name="stakeholder" value="1">
+                <label for="stakeholder1">未経験</label>
+            </div>
+        </div>
+
+        <!-- プログラマー -->
+        <div class="skill-item">
+            <div class="skill-title">プログラマー</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="programmer5" name="programmer" value="5">
+                <label for="programmer5">豊富な経験</label>
+
+                <input type="radio" id="programmer4" name="programmer" value="4">
+                <label for="programmer4">十分な経験</label>
+
+                <input type="radio" id="programmer3" name="programmer" value="3">
+                <label for="programmer3">経験あり</label>
+
+                <input type="radio" id="programmer2" name="programmer" value="2">
+                <label for="programmer2">少し経験</label>
+
+                <input type="radio" id="programmer1" name="programmer" value="1">
+                <label for="programmer1">未経験</label>
+            </div>
+        </div>
+
+        <!-- テスター -->
+        <div class="skill-item">
+            <div class="skill-title">テスター</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="tester5" name="tester" value="5">
+                <label for="tester5">豊富な経験</label>
+
+                <input type="radio" id="tester4" name="tester" value="4">
+                <label for="tester4">十分な経験</label>
+
+                <input type="radio" id="tester3" name="tester" value="3">
+                <label for="tester3">経験あり</label>
+
+                <input type="radio" id="tester2" name="tester" value="2">
+                <label for="tester2">少し経験</label>
+
+                <input type="radio" id="tester1" name="tester" value="1">
+                <label for="tester1">未経験</label>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>人間力</h2>
+
+    <div class="skill-list">
+
+        <!-- 論理的思考 -->
+        <div class="skill-item">
+            <div class="skill-title">論理的思考</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="lead5" name="lead" value="5">
+                <label for="lead5">非常に高い</label>
+
+                <input type="radio" id="lead4" name="lead" value="4">
+                <label for="lead4">高い</label>
+
+                <input type="radio" id="lead3" name="lead" value="3">
+                <label for="lead3">普通</label>
+
+                <input type="radio" id="lead2" name="lead" value="2">
+                <label for="lead2">やや低い</label>
+
+                <input type="radio" id="lead1" name="lead" value="1">
+                <label for="lead1">低い</label>
+            </div>
+        </div>
+
+        <!-- 問題分析力 -->
+        <div class="skill-item">
+            <div class="skill-title">問題分析力</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="comm5" name="comm" value="5">
+                <label for="comm5">非常に高い</label>
+
+                <input type="radio" id="comm4" name="comm" value="4">
+                <label for="comm4">高い</label>
+
+                <input type="radio" id="comm3" name="comm" value="3">
+                <label for="comm3">普通</label>
+
+                <input type="radio" id="comm2" name="comm" value="2">
+                <label for="comm2">やや低い</label>
+
+                <input type="radio" id="comm1" name="comm" value="1">
+                <label for="comm1">低い</label>
+            </div>
+        </div>
+
+        <!-- 学習意欲 -->
+        <div class="skill-item">
+            <div class="skill-title">学習意欲</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="owner5" name="owner" value="5">
+                <label for="owner5">非常に高い</label>
+
+                <input type="radio" id="owner4" name="owner" value="4">
+                <label for="owner4">高い</label>
+
+                <input type="radio" id="owner3" name="owner" value="3">
+                <label for="owner3">普通</label>
+
+                <input type="radio" id="owner2" name="owner" value="2">
+                <label for="owner2">やや低い</label>
+
+                <input type="radio" id="owner1" name="owner" value="1">
+                <label for="owner1">低い</label>
+            </div>
+        </div>
+
+        <!-- 技術調査力 -->
+        <div class="skill-item">
+            <div class="skill-title">技術調査力</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="solve5" name="solve" value="5">
+                <label for="solve5">非常に高い</label>
+
+                <input type="radio" id="solve4" name="solve" value="4">
+                <label for="solve4">高い</label>
+
+                <input type="radio" id="solve3" name="solve" value="3">
+                <label for="solve3">普通</label>
+
+                <input type="radio" id="solve2" name="solve" value="2">
+                <label for="solve2">やや低い</label>
+
+                <input type="radio" id="solve1" name="solve" value="1">
+                <label for="solve1">低い</label>
+            </div>
+        </div>
+
+        <!-- ドキュメント作成 -->
+        <div class="skill-item">
+            <div class="skill-title">ドキュメント作成</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="team5" name="team" value="5">
+                <label for="team5">非常に高い</label>
+
+                <input type="radio" id="team4" name="team" value="4">
+                <label for="team4">高い</label>
+
+                <input type="radio" id="team3" name="team" value="3">
+                <label for="team3">普通</label>
+
+                <input type="radio" id="team2" name="team" value="2">
+                <label for="team2">やや低い</label>
+
+                <input type="radio" id="team1" name="team" value="1">
+                <label for="team1">低い</label>
+            </div>
+        </div>
+
+        <!-- プレゼン能力 -->
+        <div class="skill-item">
+            <div class="skill-title">プレゼン能力</div>
+
+            <div class="radio-rating">
+                <input type="radio" id="mentor5" name="mentor" value="5">
+                <label for="mentor5">非常に高い</label>
+
+                <input type="radio" id="mentor4" name="mentor" value="4">
+                <label for="mentor4">高い</label>
+
+                <input type="radio" id="mentor3" name="mentor" value="3">
+                <label for="mentor3">普通</label>
+
+                <input type="radio" id="mentor2" name="mentor" value="2">
+                <label for="mentor2">やや低い</label>
+
+                <input type="radio" id="mentor1" name="mentor" value="1">
+                <label for="mentor1">低い</label>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="analyze()">分析する</button>
+
+    </div>
+</div>
+
+<!-- 結果ページ -->
+<div id="resultPage" style="display:none;">
+    <div class="hero">
+        <div class="hero-icon">📊</div>
+        <h1>分析結果</h1>
+        <p>キャリア診断レポート</p>
+    </div>
+
+    <button onclick="backToInput()">← 入力画面へ戻る</button>
+    <br><br>
+    
+    <div class="chart-grid">
+
+        <div class="chart-card">
+            <h3>プログラミング</h3>
+            <canvas id="programChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>フロントエンド</h3>
+            <canvas id="frontendChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>基盤技術</h3>
+            <canvas id="infraChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>AI活用力</h3>
+            <canvas id="aiChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>業務フェーズ経験</h3>
+            <canvas id="phaseChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>人間力・リーダーシップ</h3>
+            <canvas id="humanChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>プロジェクト役割</h3>
+            <canvas id="roleChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2>診断結果</h2>
+        <div id="resultArea"></div>
+    </div>
+</div>
+</div>
+
+<script>
+
+let charts=[];
+
+function radar(id,labels,data){
+
+ return new Chart(
+  document.getElementById(id),
+  {
+    type:'radar',
+    data:{
+      labels,
+      datasets:[{
+        data,
+        backgroundColor:'rgba(0,120,212,0.25)',
+        borderColor:'#0078d4',
+        borderWidth:2
+      }]
+    },
+    options:{
+
+      responsive:true,
+      maintainAspectRatio:false,
+
+      layout:{
+            padding:20
+        },
+
+      scales:{
+        r:{
+          min:0,
+          max:5,
+
+          ticks:{
+            stepSize:1,
+            backdropColor:'transparent'
+          },
+
+          pointLabels:{
+            font:{
+              size:10
+            }
+          }
+        }
+      },
+
+      plugins:{
+        legend:{
+          display:false
+        }
+      }
+    }
+  }
+ );
+}
+
+function analyze(){
+
+ charts.forEach(c=>c.destroy());
+ charts=[];
+
+const programLabels = [
+    "Java",
+    "C#",
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "PHP"
+];
+
+const program = [
+
+    getScore("java"),
+    getScore("csharp"),
+    getScore("python"),
+    getScore("javascript"),
+    getScore("typescript"),
+    getScore("php")
+
+];
+
+const frontendLabels = [
+    "HTML/CSS",
+    "React",
+    "Vue",
+    "Angular",
+    "Nuxt",
+    "Next"
+];
+
+const frontend = [
+
+    getScore("htmlcss"),
+    getScore("react"),
+    getScore("vue"),
+    getScore("angular"),
+    getScore("nuxt"),
+    getScore("nextjs")
+
+];
+
+const infraLabels = [
+    "AWS",
+    "Azure",
+    "Docker",
+    "Windows",
+    "Linux",
+    "DB"
+];
+
+const infra = [
+
+    average([
+        getScore("aws"),
+        getScore("azure"),
+        getScore("sdpf"),
+        getScore("oraclecloud")
+    ]),
+
+    getScore("azure"),
+
+    getScore("docker"),
+
+    getScore("windows"),
+
+    average([
+        getScore("ubuntu"),
+        getScore("rhel"),
+        getScore("rocky")
+    ]),
+
+    average([
+        getScore("oracle"),
+        getScore("sqlserver"),
+        getScore("postgresql"),
+        getScore("mysql")
+    ])
+];
+
+const aiLabels = [
+    "利用頻度",
+    "プロンプト",
+    "業務活用",
+    "品質評価",
+    "推進力"
+];
+
+const ai = [
+
+    getScore("aiuse"),
+    getScore("aiprompt"),
+    getScore("aiwork"),
+    getScore("aieval"),
+    getScore("aipromo")
+
+];
+
+const phaseLabels = [
+    "要件定義",
+    "基本設計",
+    "詳細設計",
+    "実装",
+    "レビュー",
+    "テスト",
+    "保守"
+];
+
+const phase = [
+
+    getScore("dev"),
+    getScore("basic"),
+    getScore("detail"),
+    getScore("make"),
+    getScore("review"),
+    getScore("test"),
+    getScore("support")
+
+];
+
+const roleLabels = [
+    "PO",
+    "PMO",
+    "PM",
+    "PL",
+    "TechLead",
+    "PG"
+];
+
+const role = [
+    getScore("po"),
+    getScore("pmo"),
+    getScore("pm"),
+    getScore("pl"),
+    getScore("techlead"),
+    getScore("programmer")
+];
+
+const humanLabels = [
+    "論理思考",
+    "分析力",
+    "主体性",
+    "課題解決",
+    "文書力",
+    "プレゼン"
+];
+
+const human = [
+
+    getScore("lead"),
+    getScore("comm"),
+    getScore("owner"),
+    getScore("solve"),
+    getScore("team"),
+    getScore("mentor")
+
+];
+
+charts.push(
+    radar("programChart", programLabels, program)
+);
+
+charts.push(
+    radar("frontendChart", frontendLabels, frontend)
+);
+
+charts.push(
+    radar("infraChart", infraLabels, infra)
+);
+
+charts.push(
+    radar("aiChart", aiLabels, ai)
+);
+
+charts.push(
+    radar("phaseChart", phaseLabels, phase)
+);
+
+charts.push(
+    radar("humanChart", humanLabels, human)
+);
+
+charts.push(
+    radar("roleChart", roleLabels, role)
+);
+
+const allItems = [
+
+ ...programLabels.map((n,i)=>({name:n,val:program[i]})),
+ ...frontendLabels.map((n,i)=>({name:n,val:frontend[i]})),
+ ...infraLabels.map((n,i)=>({name:n,val:infra[i]})),
+ ...aiLabels.map((n,i)=>({name:n,val:ai[i]})),
+ ...phaseLabels.map((n,i)=>({name:n,val:phase[i]})),
+ ...roleLabels.map((n,i)=>({name:n,val:role[i]})),
+ ...humanLabels.map((n,i)=>({name:n,val:human[i]}))
+
+];
+
+const sorted =
+    [...allItems]
+    .sort((a,b)=>b.val-a.val);
+
+const strengths =
+    sorted.slice(0,3);
+
+const weaknesses =
+    [...sorted]
+    .reverse()
+    .slice(0,3);
+
+ const categories = [
+    ...program,
+    ...frontend,
+    ...infra,
+    ...ai,
+    ...phase,
+    ...role,
+    ...human
+];
+
+const avg =
+    categories.reduce((a,b)=>a+b,0)
+    / categories.length;
+
+let rank="C";
+
+if(avg >= 4.5){
+    rank="S";
+}
+else if(avg >= 4.0){
+    rank="A";
+}
+else if(avg >= 3.0){
+    rank="B";
+}
+else if(avg >= 2.0){
+    rank="C";
+}
+else{
+    rank="D";
+}
+
+ const architect =
+    getScore("aws") +
+    getScore("azure") +
+    getScore("docker") +
+    getScore("basic") +
+    getScore("detail");
+
+const techLead =
+    getScore("java") +
+    getScore("python") +
+    getScore("techlead") +
+    getScore("lead") +
+    getScore("comm");
+
+const projectManager =
+    getScore("pm") +
+    getScore("stakeholder") +
+    getScore("owner") +
+    getScore("comm") +
+    getScore("lead");
+
+const aiEngineer =
+    getScore("python") +
+    getScore("aiuse") +
+    getScore("aiprompt") +
+    getScore("aieval") +
+    getScore("aiwork");
+
+const fullStack =
+    getScore("java") +
+    getScore("javascript") +
+    getScore("react") +
+    getScore("htmlcss") +
+    getScore("mysql");
+
+ const jobs = [
+
+{
+    name:"クラウドアーキテクト",
+    score:architect,
+    reasons:[
+        "クラウド技術に強み",
+        "設計能力が高い",
+        "インフラ知識が豊富"
+    ]
+},
+
+{
+    name:"テックリード",
+    score:techLead,
+    reasons:[
+        "技術力が高い",
+        "リーダー経験がある",
+        "チームを牽引できる"
+    ]
+},
+
+{
+    name:"プロジェクトマネージャー",
+    score:projectManager,
+    reasons:[
+        "調整能力が高い",
+        "主体的に行動できる",
+        "マネジメント適性が高い"
+    ]
+},
+
+{
+    name:"AIエンジニア",
+    score:aiEngineer,
+    reasons:[
+        "AI活用力が高い",
+        "Python経験がある",
+        "生成AI適性が高い"
+    ]
+},
+
+{
+    name:"フルスタックエンジニア",
+    score:fullStack,
+    reasons:[
+        "Web技術に強い",
+        "フロントとバック両対応",
+        "開発力が高い"
+    ]
+}
+
+].sort((a,b)=>b.score-a.score);
+
+ document.getElementById("resultArea").innerHTML=`
+
+ <div class="score">
+ 総合評価：${rank}
+ </div>
+
+ <br>
+
+ <div class="result-grid">
+
+ <div class="result-box">
+
+ <h3>強み TOP3</h3>
+ <ul>
+   ${strengths.map(x=>`<li>${x.name}</li>`).join("")}
+ </ul>
+
+ <h3>改善ポイント</h3>
+ <ul>
+   ${weaknesses.map(x=>`<li>${x.name}</li>`).join("")}
+ </ul>
+
+ </div>
+
+ <div class="result-box">
+
+ <h3>適性職種ランキング</h3>
+
+ <div class="job-ranking">
+
+${jobs.slice(0,3).map((j,i)=>`
+
+<div class="job-card rank${i+1}">
+
+<div class="job-header">
+
+<span class="job-medal">
+${i===0 ? "🥇" :
+  i===1 ? "🥈" : "🥉"}
+</span>
+
+<span class="job-title">
+${j.name}
+</span>
+
+<span class="job-score">
+${Math.floor(j.score/20*100)}%
+</span>
+
+</div>
+
+<div class="job-reason">
+
+<ul>
+${j.reasons.map(r=>`<li>${r}</li>`).join("")}
+</ul>
+
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+ </div>
+
+ `;
+
+ showResultPage();
+}
+
+function getScore(name){
+
+    const item =
+        document.querySelector(
+            `input[name="${name}"]:checked`
+        );
+
+    return item ? Number(item.value) : 0;
+}
+
+function showResultPage(){
+
+    document.getElementById("inputPage").style.display = "none";
+    document.getElementById("resultPage").style.display = "block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+function backToInput(){
+
+    document.getElementById("resultPage").style.display = "none";
+    document.getElementById("inputPage").style.display = "block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const radios =
+        document.querySelectorAll('.radio-rating input[type="radio"]');
+
+    radios.forEach(radio => {
+
+        radio.addEventListener("change", function() {
+
+            const current =
+                this.closest(".skill-item");
+
+            const next =
+                current.nextElementSibling;
+
+            if(!next ||
+               !next.classList.contains("skill-item")) {
+                return;
+            }
+
+            document
+                .querySelectorAll(".active-next")
+                .forEach(el => el.classList.remove("active-next"));
+
+            next.classList.add("active-next");
+
+            next.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+            });
+
+        });
+
+    });
+
+});
+
+function average(arr){
+
+    return Number(
+        (
+            arr.reduce((a,b)=>a+b,0)
+            / arr.length
+        ).toFixed(1)
+    );
+}
+
+</script>
+
+</body>
+</html>
