@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>エンジニア キャリアプランシート（サンプル v2 / 仕様書 v2）</title>
+<title>エンジニア キャリアプランシート（サンプル v2 / 仕様書 v1.11）</title>
 <style>
 :root{
   --bg:#0f172a; --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.14);
@@ -22,7 +22,6 @@ h2{margin:0 0 4px;color:var(--accent);font-size:20px}
 h3{color:#93c5fd;font-size:15px;margin:22px 0 10px}
 .note{color:var(--muted);font-size:13px;margin:4px 0 16px}
 .pending{border-left:3px solid #f59e0b;background:rgba(245,158,11,.08);padding:12px 16px;border-radius:8px;color:#fcd34d;font-size:13px}
-.empty-slot{min-height:38px;border-bottom:1px solid var(--border);margin-bottom:14px}
 button{background:linear-gradient(90deg,#2563eb,#3b82f6);border:none;border-radius:11px;padding:12px 22px;
   color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin:4px 6px 4px 0}
 button.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
@@ -77,7 +76,7 @@ ul.reasons{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
 
 <div class="hero">
   <h1>エンジニア キャリアプランシート</h1>
-  <p>メイテック横浜西EC / IT分野 - サンプル v2（仕様書 v2 準拠）</p>
+  <p>メイテック横浜西EC / IT分野 — サンプル v2（仕様書 v1.11 準拠）</p>
 </div>
 
 <!-- ============ 入力画面 ============ -->
@@ -138,8 +137,8 @@ ul.reasons{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
   </div>
 
   <div class="card">
-    <h2>2. 汎用能力</h2>
-    <p class="note">分野や工程が変わっても持っていける力を、カテゴリごとのレーダーチャートで表示します。</p>
+    <h2>2. レーダーチャート</h2>
+    <p class="note">工程集約は6工程を1枚で、業務ジャンル別は回答したジャンルぶんをS1〜S4の共通軸で表示します。</p>
     <div id="radarArea"></div>
   </div>
 
@@ -169,7 +168,7 @@ ul.reasons{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
   </div>
 </div>
 
-<p class="foot">サンプル v2 - 仕様書 v2 準拠</p>
+<p class="foot">サンプル v2 — 仕様書 v1.12 準拠。設問IDは暫定（REQ-231 で確定）。</p>
 </div>
 
 <script>
@@ -202,23 +201,23 @@ const SLOTS = [
 ];
 const GENRES = [
   {id:"web-frontend",  g:"アプリケーション開発", n:"Webフロントエンド",        job:"フロントエンドエンジニア", ex:["JS/TS、HTML/CSS","React／Vue／Angular／Next","コンポーネント設計、状態管理","ブラウザ互換、バンドラ、E2E"]},
-  {id:"web-backend",   g:"アプリケーション開発", n:"Webバックエンド",           job:"バックエンドエンジニア", ex:["Java／C#／PHP／Python／Go","Spring／ASP.NET／Laravel","レイヤ構成、API設計、トランザクション","APサーバ、デプロイ、ログ基盤"]},
-  {id:"desktop-app",   g:"アプリケーション開発", n:"デスクトップアプリ",        job:"デスクトップアプリエンジニア", ex:["C++／C#","WPF／WinForms／MFC／Qt","MVVM、イベント駆動","インストーラ、OS依存、配布"]},
+  {id:"web-backend",   g:"アプリケーション開発", n:"Webバックエンド・業務アプリ", job:"バックエンドエンジニア、業務アプリケーションエンジニア", ex:["Java／C#／PHP／Python／Go","Spring／ASP.NET／Laravel","レイヤ構成、API設計、トランザクション","APサーバ、デプロイ、ログ基盤"]},
+  {id:"desktop-app",   g:"アプリケーション開発", n:"デスクトップアプリ",        job:"アプリケーションエンジニア（デスクトップ）", ex:["C++／C#","WPF／WinForms／MFC／Qt","MVVM、イベント駆動","インストーラ、OS依存、配布"]},
   {id:"mobile-app",    g:"アプリケーション開発", n:"モバイルアプリ",            job:"モバイルアプリエンジニア", ex:["Swift／Kotlin／Dart","iOS SDK／Android SDK／Flutter","画面遷移、端末リソース制約","ストア審査、端末検証"]},
   {id:"cloud-sre",     g:"基盤・インフラ",       n:"クラウド・IaC・SRE",        job:"クラウドエンジニア、SRE", ex:["YAML／Python／Go","AWS／Azure／Terraform／K8s","可用性・スケーリング設計","IaC運用、監視、SLO"]},
   {id:"os-server",     g:"基盤・インフラ",       n:"OS・サーバ・ミドルウェア",   job:"インフラエンジニア", ex:["Shell／PowerShell","Linux／Windows Server／Nginx","サーバ構成、冗長化","構築自動化、パッチ運用"]},
   {id:"network",       g:"基盤・インフラ",       n:"ネットワーク・通信インフラ", job:"ネットワークエンジニア", ex:["機器CLI","ルータ／スイッチ／FW／LB／VPN","L2/L3設計、セグメント設計","疎通試験、パケット解析"]},
   {id:"protocol",      g:"基盤・インフラ",       n:"通信プロトコル実装",        job:"通信ソフトウェアエンジニア", ex:["C／C++／Python","TCP/IP／HTTP／MQTT／BLE","プロトコル状態遷移設計","パケットキャプチャ、準拠試験"]},
   {id:"security",      g:"基盤・インフラ",       n:"情報セキュリティ",          job:"セキュリティエンジニア", ex:["Python／Shell","認証基盤／WAF／診断ツール","脅威モデリング、ゼロトラスト設計","診断、監査、インシデント対応"]},
-  {id:"database",      g:"データ・AI",           n:"DB・データ基盤",            job:"データベースエンジニア", ex:["SQL／Python","RDBMS／NoSQL／DWH／ETL／BI","スキーマ設計、正規化、分散設計","移行、バックアップ、性能監視"]},
-  {id:"datascience-ml",g:"データ・AI",           n:"データサイエンス・ML",      job:"機械学習エンジニア、データサイエンティスト", ex:["Python／R","scikit-learn／PyTorch／TF","特徴量設計、モデル選定、評価設計","学習基盤、MLOps、再現性管理"]},
+  {id:"db-data",       g:"データ・AI",           n:"DB・データ基盤",            job:"データベースエンジニア、データ基盤エンジニア", ex:["SQL／Python","RDBMS／NoSQL／DWH／ETL／BI","スキーマ設計、正規化、分散設計","移行、バックアップ、性能監視"]},
+  {id:"ds-ml",         g:"データ・AI",           n:"データサイエンス・ML",      job:"機械学習エンジニア、データサイエンティスト", ex:["Python／R","scikit-learn／PyTorch／TF","特徴量設計、モデル選定、評価設計","学習基盤、MLOps、再現性管理"]},
   {id:"image-sensor",  g:"データ・AI",           n:"画像処理・センサフュージョン", job:"画像処理エンジニア", ex:["C++／Python","OpenCV／PCL","フィルタ設計、キャリブレーション","カメラ／LiDAR実機検証"]},
   {id:"edge-ai",       g:"データ・AI",           n:"エッジAI・推論最適化",      job:"エッジAIエンジニア", ex:["C++／Python","TensorRT／ONNX／TFLite","量子化・軽量化設計","ターゲット実機ベンチマーク"]},
-  {id:"simulation-xr", g:"シミュレーション・制御", n:"シミュレーション・3D・XR",  job:"シミュレーションエンジニア、XRエンジニア", ex:["C#／C++／MATLAB","Unity／Unreal／Simulink","シーン構成、物理モデル設計","実行性能調整、XRデバイス検証"]},
+  {id:"simulation",    g:"シミュレーション・制御", n:"シミュレーション・3D・XR",  job:"シミュレーションエンジニア、XRエンジニア", ex:["C#／C++／MATLAB","Unity／Unreal／Simulink","シーン構成、物理モデル設計","実行性能調整、XRデバイス検証"]},
   {id:"robotics",      g:"シミュレーション・制御", n:"ロボティクス",             job:"ロボティクスエンジニア", ex:["C++／Python","ROS／ROS2／Gazebo","ノード分割、トピック設計、制御ループ","実機デプロイ、シミュレータ連携"]},
-  {id:"package-erp",   g:"業務システム導入・自動化", n:"パッケージ・ERP・SaaS導入", job:"システム導入エンジニア", ex:["製品固有言語","SAP／Salesforce／M365","業務適合、カスタマイズ方針","導入、移行、権限設計"]},
+  {id:"package-erp",   g:"業務システム導入・自動化", n:"パッケージ・ERP・SaaS導入", job:"業務システム導入コンサルタント", ex:["製品固有言語","SAP／Salesforce／M365","業務適合、カスタマイズ方針","導入、移行、権限設計"]},
   {id:"rpa-lowcode",   g:"業務システム導入・自動化", n:"RPA・ローコード",         job:"業務自動化エンジニア", ex:["製品固有","Power Platform／UiPath","業務フロー設計、部品化","展開、実行監視、保守"]},
-  {id:"qa-automation", g:"品質",                 n:"QA・テスト自動化",          job:"QAエンジニア", ex:["Python／JS","Selenium／Playwright／JMeter","テストアーキテクチャ、データ設計","CI連携、実行環境、結果分析"]}
+  {id:"qa-auto",       g:"品質",                 n:"QA・テスト自動化",          job:"QAエンジニア、テスト自動化エンジニア", ex:["Python／JS","Selenium／Playwright／JMeter","テストアーキテクチャ、データ設計","CI連携、実行環境、結果分析"]}
 ];
 
 /* ============================================================
@@ -230,33 +229,34 @@ const GENRES = [
 const RELATIONS = [
   ["web-frontend","web-backend",  "同じWebシステムの画面側とサーバ側"],
   ["web-frontend","mobile-app",   "同じプロダクトのWeb版とアプリ版"],
-  ["web-frontend","qa-automation","画面のテスト自動化を同じ案件で分担する"],
+  ["web-frontend","qa-auto",      "画面のテスト自動化を同じ案件で分担する"],
+  ["web-backend", "desktop-app",  "クライアント／サーバ型の業務アプリの、サーバ側とクライアント側"],
   ["web-backend", "mobile-app",   "モバイルアプリと、それが呼ぶAPIサーバ"],
   ["web-backend", "cloud-sre",    "業務アプリと、その実行基盤"],
   ["web-backend", "security",     "業務アプリの認証と脆弱性対応を分担する"],
-  ["web-backend", "database",     "業務アプリと、その永続化層"],
+  ["web-backend", "db-data",      "業務アプリと、その永続化層"],
   ["web-backend", "package-erp",  "業務システムの内製部分とパッケージ部分"],
-  ["web-backend", "qa-automation","APIと負荷のテストを同じ案件で分担する"],
-  ["mobile-app",  "qa-automation","端末での検証を同じ案件で分担する"],
+  ["web-backend", "qa-auto",      "APIと負荷のテストを同じ案件で分担する"],
+  ["mobile-app",  "qa-auto",      "端末での検証を同じ案件で分担する"],
   ["cloud-sre",   "os-server",    "同じインフラの、クラウド層とサーバ層"],
   ["cloud-sre",   "security",     "クラウド基盤の権限設計と監視を分担する"],
-  ["cloud-sre",   "database",     "データ基盤と、その実行基盤"],
-  ["cloud-sre",   "qa-automation","テストを回すCI/CD基盤と、その実行環境"],
+  ["cloud-sre",   "db-data",      "データ基盤と、その実行基盤"],
+  ["cloud-sre",   "qa-auto",      "テストを回すCI/CD基盤と、その実行環境"],
   ["os-server",   "network",      "同じインフラの、サーバ層とネットワーク層"],
   ["os-server",   "security",     "サーバの堅牢化とパッチ運用を分担する"],
   ["network",     "protocol",     "ネットワーク機器と、その上を流れるプロトコルの実装"],
   ["network",     "security",     "境界の防御をネットワーク側とセキュリティ側で分担する"],
   ["protocol",    "security",     "通信の暗号化と、準拠試験"],
   ["protocol",    "robotics",     "組込み機器の、通信部と制御部"],
-  ["database",    "datascience-ml","学習データを供給する側と、利用する側"],
-  ["database",    "package-erp",  "導入時のデータ移行"],
-  ["datascience-ml","image-sensor","同じAI案件の、モデル側とセンサ入力側"],
-  ["datascience-ml","edge-ai",    "モデルを学習する側と、それを実機に載せる側"],
+  ["db-data",     "ds-ml",        "学習データを供給する側と、利用する側"],
+  ["db-data",     "package-erp",  "導入時のデータ移行"],
+  ["ds-ml",       "image-sensor", "同じAI案件の、モデル側とセンサ入力側"],
+  ["ds-ml",       "edge-ai",      "モデルを学習する側と、それを実機に載せる側"],
   ["image-sensor","edge-ai",      "センサ処理と、その推論の実機最適化"],
-  ["image-sensor","simulation-xr","実世界のセンサデータと、仮想空間での再現"],
+  ["image-sensor","simulation",   "実世界のセンサデータと、仮想空間での再現"],
   ["image-sensor","robotics",     "ロボットのセンサ処理と、本体の制御"],
   ["edge-ai",     "robotics",     "実機に載せる推論と、それを使う制御"],
-  ["simulation-xr","robotics",    "シミュレータ上での検証と、実機での動作"],
+  ["simulation",  "robotics",     "シミュレータ上での検証と、実機での動作"],
   ["package-erp", "rpa-lowcode",  "業務システムの導入と、その周辺業務の自動化"]
 ];
 
@@ -293,7 +293,7 @@ const PROCESSES = [
     "他者のコードのレビュー",
     "原因不明の不具合の切り分けと原因解析",
     "性能・リソースのチューニング"]},
-  {id:"test",          n:"テスト", items:[
+  {id:"testing",       n:"テスト", items:[
     "テスト計画の策定",
     "テストケースの設計と実施",
     "非機能テスト（性能・負荷・セキュリティ）の実施",
@@ -455,7 +455,7 @@ function renderMap(d){
   document.getElementById("mapArea").innerHTML = h + "</table>";
 }
 
-/* --- 5.3 汎用能力のレーダーチャート（インラインSVG） -------- */
+/* --- 5.3 レーダーチャート（インラインSVG） ------------------ */
 function radarSvg(labels, values, size){
   const cx=size/2, cy=size/2, R=size/2-34, N=labels.length;
   const pt=(i,r)=>{ const a=-Math.PI/2 + i*2*Math.PI/N;
@@ -463,24 +463,29 @@ function radarSvg(labels, values, size){
   let s = `<svg viewBox="0 0 ${size} ${size}" width="100%">`;
   for(let ring=1; ring<=5; ring++){
     const p = labels.map((_,i)=>pt(i,R*ring/5).map(v=>v.toFixed(1)).join(",")).join(" ");
-    s += `<polygon points="${p}" fill="none" stroke="#d9e1e8"/>`;
+    s += `<polygon points="${p}" fill="none" stroke="rgba(255,255,255,.12)"/>`;
   }
   labels.forEach((_,i)=>{ const [x,y]=pt(i,R);
-    s += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#d9e1e8"/>`; });
+    s += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.12)"/>`; });
   const poly = values.map((v,i)=>pt(i,R*v/5).map(n=>n.toFixed(1)).join(",")).join(" ");
-  s += `<polygon points="${poly}" fill="rgba(15,139,141,.22)" stroke="#006d77" stroke-width="2"/>`;
+  s += `<polygon points="${poly}" fill="rgba(56,189,248,.30)" stroke="#38bdf8" stroke-width="2"/>`;
   values.forEach((v,i)=>{ const [x,y]=pt(i,R*v/5);
-    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#006d77"/>`; });
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#38bdf8"/>`; });
   labels.forEach((L,i)=>{ const [x,y]=pt(i,R+18);
-    s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="10" fill="#5f6b7a"
+    s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="10" fill="#94a3b8"
            text-anchor="middle" dominant-baseline="middle">${L}</text>`; });
   return s + "</svg>";
 }
 function renderRadar(d){
-  const h = '<div class="radars">' + CATEGORIES.map((c,ci)=>
-    `<div class="radar-box"><h4>${c.n}</h4>
-     ${radarSvg(c.items.map(([name])=>name), d.gens[ci], 280)}</div>`
-  ).join("") + "</div>";
+  let h = `<h3>工程集約</h3><div class="radars"><div class="radar-box">
+    ${radarSvg(PROCESSES.map(p=>p.n), d.procW, 260)}</div></div>`;
+  const answered = GENRES.map((g,i)=>i).filter(i=> d.genreAnswered[i]);
+  h += `<h3>業務ジャンル別（回答した ${answered.length} ジャンル）</h3>`;
+  h += answered.length
+    ? '<div class="radars">' + answered.map(i=>
+        `<div class="radar-box"><h4>${GENRES[i].n}</h4>
+         ${radarSvg(SLOTS.map(s=>s[0].toUpperCase()), d.genres[i], 210)}</div>`).join("") + "</div>"
+    : '<p class="note">回答したジャンルがありません。</p>';
   document.getElementById("radarArea").innerHTML = h;
 }
 
@@ -509,18 +514,20 @@ function renderJobs(d){
     ? related.map(({i,anchors})=>
         `<div style="margin-bottom:14px"><span class="pill">${GENRES[i].job}</span>
          <ul class="reasons">${anchors.map(({j,why})=>
-           `<li>守備範囲の「${GENRES[j].n}」と隣り合います。${why}</li>`).join("")}</ul></div>`).join("")
+           `<li>守備範囲の「${GENRES[j].n}」と隣り合います。${why}</li>`).join("")}
+         <li>「${GENRES[i].n}」自身はまだ3.5未満（${fmt(d.genreW[i])}）です</li></ul></div>`).join("")
     : '<p class="note">関連表で結ばれた未到達のジャンルがありません。守備範囲の職種が1件もないか、結ばれた相手がすべて3.5以上です。</p>';
 
   document.getElementById("jobArea").innerHTML = h;
 }
 
-/* --- 5.5 対応可能なポジション（判定条件は未確定） ------------ */
+/* --- 5.5 対応可能なポジション（判定条件は未定） -------------- */
 function renderPositions(d){
   document.getElementById("positionArea").innerHTML =
-    `<h3>ポジション名</h3>
-     <div class="empty-slot" aria-label="ポジション名の出力欄"></div>
-     <div class="pending">判定方法が未確定のため、該当ポジション名と根拠は表示しません。</div>
+    `<div class="pending"><b>判定条件が未確定のため出力しません。</b><br>
+     工程・汎用能力の数値と、各上位職がどの単一的ポジションを土台にするかの割り当ての両方が未定です。
+     候補となる設計は要求仕様書 REQ-239 にあり、このシートに値を入れて出力を見ながら調整したうえで確定します。
+     このサンプルで出力した工程の重み付けとカテゴリの平均が、その調整の材料になります。</div>
      <h3>調整の材料（工程の重み付け）</h3>
      <table><tr><th>工程</th>${PROCESSES.map(p=>`<th>${p.n}</th>`).join("")}</tr>
      <tr><td>重み付け</td>${d.procW.map(w=>`<td>${fmt(w)}</td>`).join("")}</tr></table>
@@ -531,17 +538,7 @@ function renderPositions(d){
 
 /* --- 5.6 課題・改善内容 ------------------------------------- */
 function renderIssues(d){
-  let h = "<h3>業務ジャンル</h3>";
-  const genreRows = [];
-  GENRES.forEach((g,gi)=> SLOTS.forEach(([,slot],si)=>{
-    const v = d.genres[gi][si];
-    if(v===2||v===3) genreRows.push(`<tr><td>${g.n}</td><td>${slot}</td><td>${v}</td></tr>`);
-  }));
-  h += genreRows.length
-    ? `<table><tr><th>ジャンル</th><th>スロット</th><th>値</th></tr>${genreRows.join("")}</table>`
-    : '<p class="note">該当なし。</p>';
-
-  h += "<h3>工程</h3>";
+  let h = "<h3>工程</h3>";
   const procRows = [];
   PROCESSES.forEach((p,pi)=> p.items.forEach((it,ii)=>{
     const v = d.procs[pi][ii];
@@ -551,27 +548,25 @@ function renderIssues(d){
     ? `<table><tr><th>工程</th><th>観点</th><th>値</th></tr>${procRows.join("")}</table>`
     : '<p class="note">該当なし。</p>';
 
-  h += "<h3>汎用能力</h3>";
-  const skillRows = [];
-  CATEGORIES.forEach((c,ci)=> c.items.forEach(([name],ii)=>{
-    const v = d.gens[ci][ii];
-    if(v===2||v===3) skillRows.push(`<tr><td>${c.n}</td><td>${name}</td><td>${v}</td></tr>`);
+  h += "<h3>業務ジャンル</h3>";
+  const genRows = [];
+  GENRES.forEach((g,gi)=> SLOTS.forEach(([sid,sname],si)=>{
+    const v = d.genres[gi][si];
+    if(v===2||v===3) genRows.push(`<tr><td>${g.n}</td><td>${sname}</td><td>${v}</td></tr>`);
   }));
-  h += skillRows.length
-    ? `<table><tr><th>カテゴリ</th><th>設問</th><th>値</th></tr>${skillRows.join("")}</table>`
+  h += genRows.length
+    ? `<table><tr><th>ジャンル</th><th>スロット</th><th>値</th></tr>${genRows.join("")}</table>`
     : '<p class="note">該当なし。</p>';
+
+  h += `<div class="pending" style="margin-top:16px">汎用能力は元データに含まれていません。
+        5.6 節の元データが「工程の重み付けと、ジャンルの重み付け」のみで、
+        3ブロックあるうち2ブロックからしか導いていない状態です（REQ-228 で保留中）。</div>`;
   document.getElementById("issueArea").innerHTML = h;
 }
 
 /* --- 明細表（仕様書 7.2-6） --------------------------------- */
 function renderDetail(d){
-  let h = "<h3>業務ジャンル別のスロット値</h3>";
-  GENRES.forEach((g,gi)=>{
-    h += `<table style="margin-bottom:12px"><tr><th colspan="2">${g.n}（重み付け ${fmt(d.genreW[gi])}）</th></tr>`
-      + SLOTS.map(([,slot],si)=>`<tr><td>${slot}</td><td style="width:60px;text-align:center">${d.genres[gi][si]}</td></tr>`).join("")
-      + "</table>";
-  });
-  h += "<h3>工程別の観点値</h3>";
+  let h = "<h3>工程別の観点値</h3>";
   PROCESSES.forEach((p,pi)=>{
     h += `<table style="margin-bottom:12px"><tr><th colspan="2">${p.n}（重み付け ${fmt(d.procW[pi])}）</th></tr>`
       + p.items.map((it,ii)=>`<tr><td>${it}</td><td style="width:60px;text-align:center">${d.procs[pi][ii]}</td></tr>`).join("")
@@ -589,7 +584,7 @@ function renderDetail(d){
 /* ============================================================
    JSON 入出力（仕様書 6.1 / 6.2 / 6.3）
    ============================================================ */
-const SCHEMA_VERSION = "1.1";
+const SCHEMA_VERSION = "1.11";
 
 function exportJson(){
   const d = collect();
@@ -647,10 +642,10 @@ function fillDemo(){
   document.getElementById("pf_employeeNo").value = "12345678";
   document.getElementById("pf_department").value = "横浜西EC";
   document.getElementById("pf_specialty").value = "IT";
-  const demo = {"web-frontend":[4,4,3,3],"web-backend":[5,4,4,4],"database":[4,3,3,3],"cloud-sre":[3,2,2,2]};
+  const demo = {"web-frontend":[4,4,3,3],"web-backend":[5,4,4,4],"db-data":[4,3,3,3],"cloud-sre":[3,2,2,2]};
   GENRES.forEach((g,gi)=>{ const v = demo[g.id]; if(v) SLOTS.forEach((s,si)=> setVal(`gen_${gi}_${si}`, v[si])); });
   const pd = {requirements:[3,3,2,3],"basic-design":[4,3,3,3],"detail-design":[4,4,3],
-              implementation:[5,4,4,3],test:[3,3,2,3],operation:[3,3,2,3,2]};
+              implementation:[5,4,4,3],testing:[3,3,2,3],operation:[3,3,2,3,2]};
   PROCESSES.forEach((p,pi)=>{ const v = pd[p.id]; if(v) v.forEach((n,ii)=> setVal(`prc_${pi}_${ii}`, n)); });
   const gd = {design:[4,4,3,3],coding:[4,4,3,3,2],"tech-judge":[3,3,2],
               project:[3,3,3,2],business:[3,2,2]};
