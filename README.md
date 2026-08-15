@@ -20,7 +20,7 @@ docs/
   02_仕様書.md         設問・分析・データ・画面の仕様
   03_エビデンス編.md   フィードバック研究の調査結果
   90_執筆基準.md       文書の書き方
-  minutes/             打合せ議事録
+  minutes/             打合せ議事録と対応状況
 prototype/
   sample_v1.html       動作サンプル
   legacy_r1.html       作り直し前のシート

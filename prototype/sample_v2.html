@@ -143,10 +143,11 @@ ul.reasons{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
   </div>
 
   <div class="card">
-    <h2>3. 関連職種</h2>
-    <p class="note">まだ届いていないが近い職種名を出します。同じグループ内に重み付け3.5以上のジャンルがあり、
-      自身の重み付けが3.5未満のジャンルが対象です。順位や適合度％は出しません。</p>
-    <div id="relatedArea"></div>
+    <h2>3. 職種名</h2>
+    <p class="note">ジャンルに職種名のラベルを付けます。重み付け3.5以上のジャンルを守備範囲の職種として、
+      そのジャンルと関連表で結ばれた3.5未満のジャンルを関連職種として出します。
+      関連は同じ案件の中で隣り合って現れることを指し、技術の共通性やグループは使いません。順位や適合度％は出しません。</p>
+    <div id="jobArea"></div>
   </div>
 
   <div class="card">
@@ -167,7 +168,7 @@ ul.reasons{margin:6px 0 0;padding-left:20px;color:var(--muted);font-size:13px}
   </div>
 </div>
 
-<p class="foot">サンプル v2 — 仕様書 v1.11 準拠。設問IDは暫定（REQ-231 で確定）。</p>
+<p class="foot">サンプル v2 — 仕様書 v1.12 準拠。設問IDは暫定（REQ-231 で確定）。</p>
 </div>
 
 <script>
@@ -218,6 +219,56 @@ const GENRES = [
   {id:"rpa-lowcode",   g:"業務システム導入・自動化", n:"RPA・ローコード",         job:"業務自動化エンジニア", ex:["製品固有","Power Platform／UiPath","業務フロー設計、部品化","展開、実行監視、保守"]},
   {id:"qa-auto",       g:"品質",                 n:"QA・テスト自動化",          job:"QAエンジニア、テスト自動化エンジニア", ex:["Python／JS","Selenium／Playwright／JMeter","テストアーキテクチャ、データ設計","CI連携、実行環境、結果分析"]}
 ];
+
+/* ============================================================
+   ジャンルの関連表（仕様書 5.8）
+   関連とは、同じ案件の中で隣り合って現れること。技術が共通することではない。
+   関連するジャンルは主戦場と異なる技術を要するため、スロットの一致は条件にしない。
+   グループは表の見出しであり、近さを表さない。近さはこの表だけが定める。
+   ============================================================ */
+const RELATIONS = [
+  ["web-frontend","web-backend",  "同じWebシステムの画面側とサーバ側"],
+  ["web-frontend","mobile-app",   "同じプロダクトのWeb版とアプリ版"],
+  ["web-frontend","qa-auto",      "画面のテスト自動化を同じ案件で分担する"],
+  ["web-backend", "desktop-app",  "クライアント／サーバ型の業務アプリの、サーバ側とクライアント側"],
+  ["web-backend", "mobile-app",   "モバイルアプリと、それが呼ぶAPIサーバ"],
+  ["web-backend", "cloud-sre",    "業務アプリと、その実行基盤"],
+  ["web-backend", "security",     "業務アプリの認証と脆弱性対応を分担する"],
+  ["web-backend", "db-data",      "業務アプリと、その永続化層"],
+  ["web-backend", "package-erp",  "業務システムの内製部分とパッケージ部分"],
+  ["web-backend", "qa-auto",      "APIと負荷のテストを同じ案件で分担する"],
+  ["mobile-app",  "qa-auto",      "端末での検証を同じ案件で分担する"],
+  ["cloud-sre",   "os-server",    "同じインフラの、クラウド層とサーバ層"],
+  ["cloud-sre",   "security",     "クラウド基盤の権限設計と監視を分担する"],
+  ["cloud-sre",   "db-data",      "データ基盤と、その実行基盤"],
+  ["cloud-sre",   "qa-auto",      "テストを回すCI/CD基盤と、その実行環境"],
+  ["os-server",   "network",      "同じインフラの、サーバ層とネットワーク層"],
+  ["os-server",   "security",     "サーバの堅牢化とパッチ運用を分担する"],
+  ["network",     "protocol",     "ネットワーク機器と、その上を流れるプロトコルの実装"],
+  ["network",     "security",     "境界の防御をネットワーク側とセキュリティ側で分担する"],
+  ["protocol",    "security",     "通信の暗号化と、準拠試験"],
+  ["protocol",    "robotics",     "組込み機器の、通信部と制御部"],
+  ["db-data",     "ds-ml",        "学習データを供給する側と、利用する側"],
+  ["db-data",     "package-erp",  "導入時のデータ移行"],
+  ["ds-ml",       "image-sensor", "同じAI案件の、モデル側とセンサ入力側"],
+  ["ds-ml",       "edge-ai",      "モデルを学習する側と、それを実機に載せる側"],
+  ["image-sensor","edge-ai",      "センサ処理と、その推論の実機最適化"],
+  ["image-sensor","simulation",   "実世界のセンサデータと、仮想空間での再現"],
+  ["image-sensor","robotics",     "ロボットのセンサ処理と、本体の制御"],
+  ["edge-ai",     "robotics",     "実機に載せる推論と、それを使う制御"],
+  ["simulation",  "robotics",     "シミュレータ上での検証と、実機での動作"],
+  ["package-erp", "rpa-lowcode",  "業務システムの導入と、その周辺業務の自動化"]
+];
+
+// ジャンル i と関連表で結ばれた相手を返す。{j:相手の位置, why:関連の根拠}
+function relatedOf(i){
+  const id = GENRES[i].id, out = [];
+  RELATIONS.forEach(([a,b,why])=>{
+    const other = a===id ? b : (b===id ? a : null);
+    if(other) out.push({j: GENRES.findIndex(g=>g.id===other), why});
+  });
+  return out;
+}
 
 /* ============================================================
    ブロック2：工程能力（仕様書 4.3）— 6工程24観点
@@ -359,7 +410,7 @@ function collect(){
 
 function analyze(){
   const d = collect(); LAST = d;
-  renderMap(d); renderRadar(d); renderRelated(d);
+  renderMap(d); renderRadar(d); renderJobs(d);
   renderPositions(d); renderIssues(d); renderDetail(d);
   document.getElementById("inputScreen").classList.add("hidden");
   document.getElementById("resultScreen").classList.remove("hidden");
@@ -379,14 +430,8 @@ function renderMap(d){
   // 列の隣接：有効な工程に隣り合う無効な工程
   const colAdj = colOn.map((on,i)=> !on && ((colOn[i-1]===true)||(colOn[i+1]===true)));
 
-  // 行の隣接：同じグループ内で有効なジャンルに隣り合う無効なジャンル
-  const rowAdj = new Array(GENRES.length).fill(false);
-  GENRES.forEach((g,i)=>{
-    if(rowOn[i]) return;
-    const prev = GENRES[i-1], next = GENRES[i+1];
-    if(prev && prev.g===g.g && rowOn[i-1]) rowAdj[i]=true;
-    if(next && next.g===g.g && rowOn[i+1]) rowAdj[i]=true;
-  });
+  // 行の隣接：有効なジャンルと関連表で結ばれた無効なジャンル。表の並び順は使わない
+  const rowAdj = GENRES.map((g,i)=> !rowOn[i] && relatedOf(i).some(({j})=> rowOn[j]));
 
   let h = '<table class="map"><tr><th style="text-align:left">業務ジャンル</th>';
   PROCESSES.forEach((p,i)=>{
@@ -444,22 +489,36 @@ function renderRadar(d){
   document.getElementById("radarArea").innerHTML = h;
 }
 
-/* --- 5.4 関連職種 ------------------------------------------ */
-function renderRelated(d){
-  const out = [];
+/* --- 5.4 職種名 --------------------------------------------- */
+function renderJobs(d){
+  // 守備範囲の職種（B1）：重み付け3.5以上のジャンル
+  const covered = GENRES.map((g,i)=>i).filter(i=> d.genreW[i] >= 3.5);
+
+  // 関連職種（B2）：守備範囲の職種のジャンルと関連表で結ばれ、自身は3.5未満
+  const related = [];
   GENRES.forEach((g,i)=>{
     if(d.genreW[i] >= 3.5) return;
-    const peers = GENRES.map((x,j)=>({x,j}))
-      .filter(({x,j})=> j!==i && x.g===g.g && d.genreW[j]>=3.5);
-    if(peers.length) out.push({g, peers});
+    const anchors = relatedOf(i).filter(({j})=> d.genreW[j] >= 3.5);
+    if(anchors.length) related.push({i, anchors});
   });
-  document.getElementById("relatedArea").innerHTML = out.length
-    ? out.map(({g,peers})=>
-        `<div style="margin-bottom:14px"><span class="pill">${g.job}</span>
-         <ul class="reasons"><li>同じグループ「${g.g}」の
-         ${peers.map(p=>`「${p.x.n}」`).join("、")}で重み付け3.5以上に達しています</li>
-         <li>「${g.n}」自身はまだ3.5未満（${fmt(d.genreW[GENRES.indexOf(g)])}）です</li></ul></div>`).join("")
-    : '<p class="note">条件に該当するジャンルがありません。重み付け3.5以上のジャンルが1つもないか、同グループがすべて3.5以上です。</p>';
+
+  let h = "<h3>守備範囲の職種</h3>";
+  h += covered.length
+    ? covered.map(i=>
+        `<div style="margin-bottom:14px"><span class="pill">${GENRES[i].job}</span>
+         <ul class="reasons"><li>「${GENRES[i].n}」の重み付けが ${fmt(d.genreW[i])} で、3.5以上に達しています</li></ul></div>`).join("")
+    : '<p class="note">重み付け3.5以上のジャンルがありません。</p>';
+
+  h += "<h3>関連職種</h3>";
+  h += related.length
+    ? related.map(({i,anchors})=>
+        `<div style="margin-bottom:14px"><span class="pill">${GENRES[i].job}</span>
+         <ul class="reasons">${anchors.map(({j,why})=>
+           `<li>守備範囲の「${GENRES[j].n}」と隣り合います。${why}</li>`).join("")}
+         <li>「${GENRES[i].n}」自身はまだ3.5未満（${fmt(d.genreW[i])}）です</li></ul></div>`).join("")
+    : '<p class="note">関連表で結ばれた未到達のジャンルがありません。守備範囲の職種が1件もないか、結ばれた相手がすべて3.5以上です。</p>';
+
+  document.getElementById("jobArea").innerHTML = h;
 }
 
 /* --- 5.5 対応可能なポジション（判定条件は未定） -------------- */
